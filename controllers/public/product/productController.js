@@ -1,51 +1,57 @@
-const BookModel = require('../../../models/Book');
+const Product = require('../../../models/Product');
 
-exports.getBookDetail = async (req, res) => {
-  const bookId = parseInt(req.params.id, 10);
-  if (isNaN(bookId)) {
+exports.getProductDetail = async (req, res) => {
+  const productId = parseInt(req.params.id, 10);
+  if (isNaN(productId)) {
     return res.status(400).json({
       hasError: true,
       data: null,
-      message: 'Invalid book id'
+      message: 'Invalid product id'
     });
   }
-
+  
   try {
-    const bookItem = await BookModel.findOne({ bookId });
-    if (!bookItem) {
+    const product = await Product.findOne({ productId });
+    if (!product) {
       return res.status(404).json({
         hasError: true,
         data: null,
-        message: 'Book not found'
+        message: 'Product not found'
       });
     }
+    
     return res.json({
       hasError: false,
-      data: bookItem,
-      message: 'Book detail retrieved successfully'
+      data: product,
+      message: 'Product detail retrieved successfully'
     });
   } catch (error) {
     console.error(error);
     return res.status(500).json({
       hasError: true,
       data: null,
-      message: 'Error retrieving book detail'
+      message: 'Error retrieving product detail'
     });
   }
 };
 
-exports.getBooks = async (req, res) => {
+exports.getProducts = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 10;
   const skip = (page - 1) * limit;
 
-  try {
-    const books = await BookModel.find().skip(skip).limit(limit);
-    const total = await BookModel.countDocuments();
+  const filter = {};
+  if (req.query.productType) {
+    filter.productType = req.query.productType;
+  }
 
+  try {
+    const products = await Product.find(filter).skip(skip).limit(limit);
+    const total = await Product.countDocuments(filter);
+    
     return res.json({
       hasError: false,
-      data: books,
+      data: products,
       pagination: {
         page,
         limit,
@@ -58,7 +64,7 @@ exports.getBooks = async (req, res) => {
     return res.status(500).json({
       hasError: true,
       data: null,
-      message: 'Error retrieving books'
+      message: 'Error retrieving products'
     });
   }
 };

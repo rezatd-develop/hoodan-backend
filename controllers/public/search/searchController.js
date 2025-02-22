@@ -1,6 +1,4 @@
-const ClassModel = require('../../../models/Class');
-const BookModel = require('../../../models/Book');
-const ArtItemModel = require('../../../models/ArtItem');
+const Product = require('../../../models/Product');
 
 exports.searchAll = async (req, res) => {
   const { q } = req.query;
@@ -15,19 +13,8 @@ exports.searchAll = async (req, res) => {
   
   try {
     const regex = new RegExp(q, 'i');
-
-    const [classes, books, artItems] = await Promise.all([
-      ClassModel.find({ title: regex }),
-      BookModel.find({ title: regex }),
-      ArtItemModel.find({ title: regex })
-    ]);
-
-    const classesWithType = classes.map(item => ({ ...item.toObject(), type: 'class' }));
-    const booksWithType = books.map(item => ({ ...item.toObject(), type: 'book' }));
-    const artItemsWithType = artItems.map(item => ({ ...item.toObject(), type: 'artItem' }));
-
-    const results = [...classesWithType, ...booksWithType, ...artItemsWithType];
-
+    const results = await Product.find({ title: regex });
+    
     return res.json({
       hasError: false,
       data: results,
@@ -38,7 +25,7 @@ exports.searchAll = async (req, res) => {
     return res.status(500).json({
       hasError: true,
       data: null,
-      message: 'Error searching for items'
+      message: 'Error searching for products'
     });
   }
 };
