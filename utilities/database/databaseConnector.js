@@ -1,12 +1,19 @@
-const express = require('express');
-const databaseConnectorApp = express();
-const db = require('./../../config/db');
+const mongoose = require('mongoose');
 
-db.connect();
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/hoodan';
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    process.exit(1);
+  }
+};
 
-databaseConnectorApp.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+connectDB();
 
-module.exports = databaseConnectorApp;
+module.exports = connectDB;

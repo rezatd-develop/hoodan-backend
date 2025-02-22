@@ -1,9 +1,7 @@
 const express = require('express');
-const mainRouter = express.Router();
+const mainRouter = express();
+const publicRouter = require('./public/publicRouter');
 
-mainRouter.get('/api/test', (req, res) => {
-  console.log('*** mainRouter test route hit');
-  res.send('Main router is working');
-});
+mainRouter.use('/api/:culture/public', publicRouter);
 
 module.exports = mainRouter;
