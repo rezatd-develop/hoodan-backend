@@ -1,0 +1,33 @@
+{
+    "public": {
+        "auth": {
+            "phone": "localhost:3001/en/public/phone",
+            "verify": "localhost:3001/en/public/verify",
+            "register": "localhost:3001/en/public/register"
+        },
+        "blog": {
+            "getBlogs": "localhost:3001/en/public/blogs",
+            "getBlogDetail": "localhost:3001/en/public/blogs/:id"
+        },
+        "product": {
+            "getProducts": "localhost:3001/en/public/products",
+            "getProductDetail": "localhost:3001/en/public/products/:id"
+        },
+        "search": {
+            "searchAll": "localhost:3001/en/public/search"
+        },
+        "slider": {
+            "getSliderDetail": "localhost:3001/en/public/sliders/:id"
+        }
+    },
+    "profile": {
+        "order": {
+            "getAllOrders": "localhost:3001/en/profile/orders",
+            "createOrder": "localhost:3001/en/profile/orders"
+        },
+        "detail": {
+            "getBasicInfo": "localhost:3001/en/profile/detail/getBasicInfo"
+        }
+    },
+    "admin": {}
+}
