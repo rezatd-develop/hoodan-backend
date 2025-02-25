@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
   productId: { type: Number, required: true },
+  userId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
   orderId: { type: Number, unique: true },
   productImg: { type: String, required: true },
   productTitle: { type: String, required: true },

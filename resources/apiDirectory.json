@@ -1,9 +1,9 @@
 {
     "public": {
         "auth": {
-            "phone": "localhost:3001/en/public/phone",
-            "verify": "localhost:3001/en/public/verify",
-            "register": "localhost:3001/en/public/register"
+            "phone": "localhost:3001/en/public/auth/phone",
+            "verify": "localhost:3001/en/public/auth/verify",
+            "register": "localhost:3001/en/public/auth/register"
         },
         "blog": {
             "getBlogs": "localhost:3001/en/public/blogs",
@@ -27,6 +27,9 @@
         },
         "detail": {
             "getBasicInfo": "localhost:3001/en/profile/detail/getBasicInfo"
+        },
+        "cart": {
+            
         }
     },
     "admin": {}
