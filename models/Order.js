@@ -13,7 +13,12 @@ const orderSchema = new mongoose.Schema({
   productDescription: { type: String },
   productPrice: { type: Number, required: true },
   totalOrderPrice: { type: Number, required: true },
-  orderRegistrationTime: { type: Date, default: Date.now }
+  orderRegistrationTime: { type: Date, default: Date.now },
+  orderStatus: { 
+    type: Number, 
+    default: 0, 
+    enum: [0, 1, 2, 3]
+  }
 }, { timestamps: true });
 
 orderSchema.pre('save', function(next) {
