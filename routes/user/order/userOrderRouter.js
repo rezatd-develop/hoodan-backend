@@ -4,6 +4,6 @@ const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTok
 const { createOrder, getAllOrders } = require('../../../controllers/user/order/userOrderController');
 
 userOrderRouter.post('/createOrder', verifyTokenAndSetUserId, createOrder);
-userOrderRouter.get('/en/user/order/getAllOrders', verifyTokenAndSetUserId, getAllOrders);
+userOrderRouter.get('/getAllOrders', verifyTokenAndSetUserId, getAllOrders);
 
 module.exports = userOrderRouter;
