@@ -7,6 +7,7 @@ exports.generateToken = (user) => {
     phone: user.phone,
     firstName: user.firstName,
     lastName: user.lastName,
+    role: user.role
   };
 
   return jwt.sign(payload, SECRET, { expiresIn: '48h' });
