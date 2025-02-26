@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../../../models/User');
 
 exports.getAllUsers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;

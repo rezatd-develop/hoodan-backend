@@ -3,6 +3,6 @@ const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTok
 const { updateProfile } = require('../../../controllers/user/detail/userDetailRouter');
 const userDetailRouter = express();
 
-router.put('/updateProfile', verifyTokenAndSetUserId, updateProfile);
+userDetailRouter.put('/updateProfile', verifyTokenAndSetUserId, updateProfile);
 
 module.exports = userDetailRouter;
