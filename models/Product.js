@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
   productId: { type: Number, required: true, unique: true },
-  productType: { 
-    type: String, 
-    enum: ['class', 'book', 'artItem'], 
-    required: true 
+  productType: {
+    type: Number,
+    enum: [1, 2, 3],
+    required: true
   },
   title: { type: String, required: true },
   images: [{ type: String }],
-  description: { type: String }, 
+  description: { type: String },
 
   classSeries: { type: String },
   primaryDescription: { type: String },

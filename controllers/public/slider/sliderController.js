@@ -33,3 +33,21 @@ exports.getSlider = async (req, res) => {
     });
   }
 };
+
+exports.getAllSliders = async (req, res) => {
+  try {
+    const sliders = await Slider.find();
+    return res.json({
+      hasError: false,
+      data: sliders,
+      message: 'Sliders retrieved successfully'
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      hasError: true,
+      data: null,
+      message: 'Error retrieving sliders'
+    });
+  }
+};
