@@ -13,9 +13,9 @@ exports.getCart = async (req, res) => {
     }
 };
 
-exports.addToCart = async (req, res) => {
+exports.modifyCart = async (req, res) => {
     const { productId, quantity } = req.body;
-    if (!productId || !quantity) {
+    if (!productId || quantity === undefined) {
         return res.status(400).json({ error: 'productId and quantity are required.' });
     }
 
@@ -32,47 +32,21 @@ exports.addToCart = async (req, res) => {
 
         const itemIndex = cart.items.findIndex(item => item.productId === productId);
         if (itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
+            if (quantity <= 0) {
+                cart.items.splice(itemIndex, 1);
+            } else {
+                cart.items[itemIndex].quantity = quantity;
+            }
         } else {
-            cart.items.push({ productId, quantity });
+            if (quantity > 0) {
+                cart.items.push({ productId, quantity });
+            }
         }
 
         const updatedCart = await cart.save();
         res.status(200).json(updatedCart);
-
     } catch (err) {
-        res.status(500).json({ error: 'Failed to add item to cart', message: err.message });
-    }
-};
-
-exports.updateCart = async (req, res) => {
-    const { productId, quantity } = req.body;
-    if (!productId || quantity === undefined) {
-        return res.status(400).json({ error: 'productId and quantity are required.' });
-    }
-
-    try {
-        let cart = await Cart.findOne({ userId: req.user.id });
-        if (!cart) {
-            return res.status(404).json({ error: 'Cart not found.' });
-        }
-
-        const itemIndex = cart.items.findIndex(item => item.productId === productId);
-        if (itemIndex === -1) {
-            return res.status(404).json({ error: 'Product not found in cart.' });
-        }
-
-        if (quantity <= 0) {
-            cart.items.splice(itemIndex, 1);
-        } else {
-            cart.items[itemIndex].quantity = quantity;
-        }
-
-        const updatedCart = await cart.save();
-        res.status(200).json(updatedCart);
-
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to update cart', message: err.message });
+        res.status(500).json({ error: 'Failed to modify cart', message: err.message });
     }
 };
 

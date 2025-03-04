@@ -4,8 +4,7 @@ const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTok
 const { getCart, addToCart, updateCart, removeFromCart } = require('../../../controllers/user/cart/userCartController');
 
 userCartRouter.get('/', verifyTokenAndSetUserId, getCart);
-userCartRouter.post('', verifyTokenAndSetUserId, addToCart);
-userCartRouter.put('', verifyTokenAndSetUserId, updateCart);
+userCartRouter.post('', verifyTokenAndSetUserId, modifyCart);
 userCartRouter.delete('/:productId', verifyTokenAndSetUserId, removeFromCart);
 
 module.exports = userCartRouter;
