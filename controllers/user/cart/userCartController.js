@@ -13,6 +13,45 @@ exports.getCart = async (req, res) => {
     }
 };
 
+exports.getUserCart = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const cart = await Cart.findOne({ userId });
+        if (!cart) {
+            return res.status(200).json([]);
+        }
+
+        const detailedItems = await Promise.all(cart.items.map(async (item) => {
+            const product = await Product.findOne({ productId: item.productId });
+            if (!product) {
+                return null;
+            }
+
+            const pricePerEach = parseFloat(product.price) || 0;
+            return {
+                productId: item.productId,
+                productName: product.title,
+                quantity: item.quantity,
+                pricePerEach: pricePerEach,
+                totalPrice: pricePerEach * item.quantity
+            };
+        }));
+
+        const items = detailedItems.filter(item => item !== null);
+
+        const outputCart = [{
+            cartId: cart._id,
+            userId: cart.userId,
+            items
+        }];
+
+        res.status(200).json(outputCart);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve cart', message: error.message });
+    }
+};
+
 exports.modifyCart = async (req, res) => {
     const { productId, quantity } = req.body;
     if (!productId || quantity === undefined) {
