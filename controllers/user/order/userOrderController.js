@@ -1,67 +1,59 @@
 const Order = require('../../../models/Order');
 const Product = require('../../../models/Product');
+const Cart = require('../../../models/Cart'); // Import Cart model
 
 exports.createOrder = async (req, res) => {
-  const { productIds } = req.body;
-  
-  if (!Array.isArray(productIds) || productIds.length === 0) {
-    return res.status(400).json({ error: 'An array of productIds is required.' });
-  }
-  
   try {
-    const productCount = productIds.reduce((acc, id) => {
-      acc[id] = (acc[id] || 0) + 1;
-      return acc;
-    }, {});
-    
-    const uniqueProductIds = Object.keys(productCount).map(Number);
-        const products = await Product.find({ productId: { $in: uniqueProductIds } });
-    
-    if (products.length !== uniqueProductIds.length) {
-      const foundIds = products.map(p => p.productId);
-      const missingIds = uniqueProductIds.filter(id => !foundIds.includes(id));
-      return res.status(404).json({ error: 'Some products not found', missing: missingIds });
+    const { orders } = req.body;
+    if (!orders || !Array.isArray(orders) || orders.length === 0) {
+      return res.status(400).json({ error: 'Invalid order data' });
     }
-    
-    const orderItems = products.map(product => {
-      const quantity = productCount[product.productId] || 1;
-      const productImg = (product.images && product.images.length > 0) ? product.images[0] : '';
-      const productTitle = product.title;
-      const productDescription = product.description || product.mainDescription || '';
-      const productPrice = Number(product.price);
-      
-      if (isNaN(productPrice)) {
-        throw new Error(`Invalid product price for productId ${product.productId}`);
+
+    const userId = req.user.id;
+    let totalOrderPrice = 0;
+    let orderItems = [];
+
+    for (const order of orders) {
+      const product = await Product.findOne({ productId: order.productid });
+      if (!product) {
+        return res.status(404).json({ error: `Product with ID ${order.productid} not found` });
       }
-      
-      return {
+
+      const itemTotalPrice = parseFloat(product.price) * order.quantity;
+      totalOrderPrice += itemTotalPrice;
+
+      orderItems.push({
         productId: product.productId,
-        productImg,
-        productTitle,
-        productDescription,
-        productPrice,
-        quantity
-      };
-    });
-    
-    const totalOrderPrice = orderItems.reduce(
-      (sum, item) => sum + item.productPrice * item.quantity, 
-      0
-    );
-    
+        productImg: product.images[0] || '',
+        productTitle: product.title,
+        productDescription: product.description,
+        productPrice: parseFloat(product.price),
+        quantity: order.quantity
+      });
+    }
+
     const newOrder = new Order({
       items: orderItems,
-      userId: req.user.id,
+      userId,
       totalOrderPrice
     });
-    
-    const savedOrder = await newOrder.save();
-    res.status(201).json(savedOrder);
-    
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to create order', message: err.message });
+
+    await newOrder.save();
+
+    // **Remove the ordered items from the cart**
+    await Cart.findOneAndUpdate(
+      { userId },
+      { $pull: { items: { productId: { $in: orders.map(order => order.productid) } } } },
+      { new: true }
+    );
+
+    res.status(201).json({ message: 'Order created successfully', order: newOrder, hasError: false });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 exports.getAllOrders = async (req, res) => {
   try {
