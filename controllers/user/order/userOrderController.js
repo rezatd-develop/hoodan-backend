@@ -12,6 +12,14 @@ exports.createOrder = async (req, res) => {
     }
 
     const userId = req.user.id;
+    const firstName = req.user.firstName; // Extract first name from token
+    const lastName = req.user.lastName;   // Extract last name from token
+    const phone = req.user.phone; // Extract phone number from token
+
+    if (!firstName || !lastName || !phone) {
+      return res.status(400).json({ error: 'User information missing from token' });
+    }
+
     let totalOrderPrice = 0;
     let orderItems = [];
 
@@ -37,6 +45,9 @@ exports.createOrder = async (req, res) => {
     const newOrder = new Order({
       items: orderItems,
       userId,
+      firstName,
+      lastName,
+      phone,
       totalOrderPrice
     });
 
@@ -55,7 +66,6 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 
 
 exports.getAllOrders = async (req, res) => {

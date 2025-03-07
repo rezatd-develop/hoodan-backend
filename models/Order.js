@@ -11,22 +11,27 @@ const orderItemSchema = new mongoose.Schema({
 
 const orderSchema = new mongoose.Schema({
   items: [orderItemSchema],
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User', 
-    required: true 
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  phone: { type: String, required: true },
   orderId: { type: Number, unique: true },
   totalOrderPrice: { type: Number, required: true },
   orderRegistrationTime: { type: Date, default: Date.now },
-  orderStatus: { 
-    type: Number, 
-    default: 0, 
+  orderStatus: {
+    type: Number,
+    default: 0,
     enum: [0, 1, 2, 3]
   }
 }, { timestamps: true });
 
-orderSchema.pre('save', function(next) {
+
+
+orderSchema.pre('save', function (next) {
   if (!this.orderId) {
     this.orderId = Math.floor(1000000 + Math.random() * 900000);
   }
