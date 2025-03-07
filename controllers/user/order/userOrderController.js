@@ -1,6 +1,8 @@
 const Order = require('../../../models/Order');
 const Product = require('../../../models/Product');
 const Cart = require('../../../models/Cart'); // Import Cart model
+const moment = require('moment'); // Import moment.js for date formatting
+const { translateOrderStatus } = require('../../../utilities/enumTranslations/enumTranslator');
 
 exports.createOrder = async (req, res) => {
   try {
@@ -55,10 +57,19 @@ exports.createOrder = async (req, res) => {
 };
 
 
+
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user.id });
-    res.status(200).json(orders);
+
+    const updatedOrders = orders.map(order => ({
+      ...order.toObject(),
+      orderItems: order.items.map(item => item.productTitle).join(', '),
+      orderRegistrationTimeFormatted: moment(order.orderRegistrationTime).format('DD MMM YYYY'),
+      orderStatusLabel: translateOrderStatus(order?.orderStatus)
+    }));
+
+    res.status(200).json(updatedOrders);
   } catch (err) {
     res.status(500).json({ error: 'Failed to retrieve orders', message: err.message });
   }
