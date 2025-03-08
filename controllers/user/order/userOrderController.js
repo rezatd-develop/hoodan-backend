@@ -14,6 +14,7 @@ exports.createOrder = async (req, res) => {
     const userId = req.user.id;
     const firstName = req.user.firstName; // Extract first name from token
     const lastName = req.user.lastName;   // Extract last name from token
+    const fullName = `${req.user.firstName} ${req.user.lastName}`; // Extract phone number from token
     const phone = req.user.phone; // Extract phone number from token
 
     if (!firstName || !lastName || !phone) {
@@ -38,7 +39,7 @@ exports.createOrder = async (req, res) => {
         productTitle: product.title,
         productDescription: product.description,
         productPrice: parseFloat(product.price),
-        quantity: order.quantity
+        quantity: order.quantity,
       });
     }
 
@@ -47,6 +48,7 @@ exports.createOrder = async (req, res) => {
       userId,
       firstName,
       lastName,
+      fullName,
       phone,
       totalOrderPrice
     });
