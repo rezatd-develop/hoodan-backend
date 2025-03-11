@@ -36,19 +36,28 @@ exports.getProductDetail = async (req, res) => {
 };
 
 exports.editProduct = async (req, res) => {
-    const { productId, update } = req.body;
-    if (!productId || !update) {
-        return res.status(400).json({ error: 'Product id and update data are required.' });
+    const { productId } = req.body;
+    const update = req.body.update ? JSON.parse(req.body.update) : {};
+
+    if (!productId) {
+        return res.status(400).json({ error: 'Product ID is required.' });
     }
+
     try {
+        if (req.file) {
+            update.imageUrl = `/uploads/${req.file.filename}`;
+        }
+
         const updatedProduct = await Product.findOneAndUpdate(
             { productId: Number(productId) },
             update,
             { new: true }
         );
+
         if (!updatedProduct) {
             return res.status(404).json({ error: 'Product not found.' });
         }
+
         res.status(200).json({ message: 'Product updated successfully', product: updatedProduct });
     } catch (err) {
         res.status(500).json({ error: 'Failed to update product', message: err.message });
