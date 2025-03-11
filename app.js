@@ -6,7 +6,11 @@ const startupMiddlewaresApp = require('./utilities/startupMiddlewares/startupMid
 const databaseConnectorApp = require('./utilities/database/databaseConnector');
 const { startListeningServer } = require('./utilities/listener/listener')
 
+const path = require("path");
+
+
 const app = express();
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(startupMiddlewaresApp);
 app.use(accessControlHeadersApp);
 app.use(mainRouter);

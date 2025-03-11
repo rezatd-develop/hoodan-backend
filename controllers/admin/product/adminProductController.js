@@ -44,9 +44,10 @@ exports.editProduct = async (req, res) => {
     }
 
     try {
-        if (req.file) {
-            update.imageUrl = `/uploads/${req.file.filename}`;
-        }
+            const baseUrl = `http://localhost:3001`;
+            update.imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
+
+
 
         const updatedProduct = await Product.findOneAndUpdate(
             { productId: Number(productId) },
