@@ -3,7 +3,7 @@ const adminOrderRouter = require('./order/adminOrderRouter');
 const adminProductRouter = require('./product/adminProductRouter');
 const adminUserRouter = require('./user/adminUserRouter');
 const adminBlogRouter = require('./blog/adminBlogRouter');
-const adminRouter = express();
+const adminRouter = express.Router({ mergeParams: true });
 
 adminRouter.use('/order', adminOrderRouter);
 adminRouter.use('/product', adminProductRouter);

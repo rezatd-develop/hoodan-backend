@@ -1,5 +1,5 @@
 const express = require('express');
-const userCartRouter = express.Router();
+const userCartRouter = express.Router({ mergeParams: true });
 const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTokenAndSetUserId');
 const { getCart, getUserCart, modifyCart, removeFromCart } = require('../../../controllers/user/cart/userCartController');
 

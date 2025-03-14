@@ -1,5 +1,5 @@
 const express = require('express');
-const publicRouter = express();
+const publicRouter = express.Router({ mergeParams: true });
 const authRouter = require('./auth/authRouter');
 const sliderRouter = require('./slider/sliderRouter');
 const blogRouter = require('./blog/blogRouter');

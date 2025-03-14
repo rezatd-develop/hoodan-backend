@@ -66,9 +66,9 @@ exports.createBlog = async (req, res) => {
     // Parse the update JSON string into an object
     update = JSON.parse(update);
 
-    const { title, description, publishDate, author, categories, content } = update;
+    const { title, description, publishDate, author, categories, content, culture } = update;
 
-    if (!title || !content) {
+    if (!title || !content || !culture) {
       return res.status(400).json({ error: 'Title and content are required.' });
     }
 
@@ -90,6 +90,7 @@ exports.createBlog = async (req, res) => {
       images: req.file ? `http://localhost:3001/${req.file.path}` : [],
       categories: parsedCategories,
       content,
+      culture
     });
 
     const savedBlog = await newBlog.save();

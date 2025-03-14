@@ -2,6 +2,8 @@ const Product = require('../../../models/Product');
 
 exports.getProductDetail = async (req, res) => {
   const productId = parseInt(req.params.id, 10);
+  const culture = req.params.culture;
+
   if (isNaN(productId)) {
     return res.status(400).json({
       hasError: true,
@@ -11,7 +13,7 @@ exports.getProductDetail = async (req, res) => {
   }
   
   try {
-    const product = await Product.findOne({ productId });
+    const product = await Product.findOne({ productId, culture });
     if (!product) {
       return res.status(404).json({
         hasError: true,
@@ -39,8 +41,11 @@ exports.getProducts = async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 10;
   const skip = (page - 1) * limit;
+  
 
-  const filter = {};
+  const culture = req.params.culture; 
+  const filter = { culture };
+
   if (req.query.productType) {
     filter.productType = req.query.productType;
   }

@@ -1,5 +1,5 @@
 const express = require('express');
-const adminProductRouter = express.Router();
+const adminProductRouter = express.Router({ mergeParams: true });
 const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTokenAndSetUserId');
 const verifyAdmin = require('../../../middlewares/auth/verifyAdmin');
 const { getAllProducts, getProductDetail, editProduct, deleteProduct, createProduct } = require('../../../controllers/admin/product/adminProductController');

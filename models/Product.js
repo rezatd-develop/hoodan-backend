@@ -36,7 +36,9 @@ const productSchema = new mongoose.Schema({
   author: { type: String },
   publishDate: { type: Date },
   categories: [{ type: String }],
-  content: { type: String }
+  content: { type: String },
+  culture: { type: String }
+
 
 }, { timestamps: true });
 

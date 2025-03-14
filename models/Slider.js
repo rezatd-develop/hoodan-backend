@@ -11,7 +11,8 @@ const slideSchema = new mongoose.Schema({
 
 const sliderSchema = new mongoose.Schema({
   sliderId: { type: Number, required: true, unique: true },
-  slides: [slideSchema]
+  slides: [slideSchema],
+  culture: { type: String }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Slider', sliderSchema);

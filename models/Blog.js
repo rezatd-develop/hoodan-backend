@@ -9,7 +9,8 @@ const blogSchema = new mongoose.Schema({
   author: { type: String },
   images: [{ type: String }],
   categories: [{ type: String }],
-  content: { type: String }
+  content: { type: String },
+  culture: { type: String }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Blog', blogSchema);

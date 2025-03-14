@@ -2,7 +2,8 @@ const Product = require('../../../models/Product');
 
 exports.searchAll = async (req, res) => {
   const { q } = req.query;
-  
+  const culture = req.params.culture; 
+
   if (!q || q.trim() === '') {
     return res.status(400).json({
       hasError: true,
@@ -10,11 +11,11 @@ exports.searchAll = async (req, res) => {
       message: 'Search query is required'
     });
   }
-  
+
   try {
     const regex = new RegExp(q, 'i');
-    const results = await Product.find({ title: regex });
-    
+    const results = await Product.find({ title: regex, culture });
+
     return res.json({
       hasError: false,
       data: results,

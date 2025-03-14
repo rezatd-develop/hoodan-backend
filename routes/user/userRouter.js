@@ -2,7 +2,7 @@ const express = require('express');
 const userCartRouter = require('./cart/userCartRouter');
 const userOrderRouter = require('./order/userOrderRouter');
 const userDetailRouter = require('./detail/userDetailRouter');
-const userRouter = express();
+const userRouter = express.Router({ mergeParams: true });
 
 userRouter.use('/cart', userCartRouter);
 userRouter.use('/order', userOrderRouter);

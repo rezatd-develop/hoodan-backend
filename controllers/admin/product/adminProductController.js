@@ -44,8 +44,8 @@ exports.editProduct = async (req, res) => {
     }
 
     try {
-            const baseUrl = `http://localhost:3001`;
-            update.imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
+        const baseUrl = `http://localhost:3001`;
+        update.imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
 
 
 
@@ -86,9 +86,9 @@ exports.createProduct = async (req, res) => {
         primaryDescription, secondDescription, thirdDescription, price,
         FaqOneKey, FaqOneValue, FaqTwoKey, FaqTwoValue, FaqThreeKey, FaqThreeValue,
         FaqFourKey, FaqFourValue, detailOneKey, detailOneValue, detailTwoKey, detailTwoValue,
-        detailThreeKey, detailThreeValue, mainDescription, author, publishDate, categories, content } = req.body;
+        detailThreeKey, detailThreeValue, mainDescription, author, publishDate, categories, content, culture } = req.body;
 
-    if (!productType || !title) {
+    if (!productType || !title || !culture) {
         return res.status(400).json({ error: 'Product type and title are required.' });
     }
 
@@ -130,7 +130,8 @@ exports.createProduct = async (req, res) => {
             author,
             publishDate: publishDate ? new Date(publishDate) : undefined,
             categories: categories || [],
-            content
+            content,
+            culture
         });
         const savedProduct = await newProduct.save();
         res.status(201).json({ message: 'Product created successfully', product: savedProduct });

@@ -2,6 +2,8 @@ const Slider = require('../../../models/Slider');
 
 exports.getSlider = async (req, res) => {
   const sliderId = parseInt(req.params.id, 10);
+  const culture = req.params.culture;
+
   if (isNaN(sliderId)) {
     return res.status(400).json({
       hasError: true,
@@ -11,7 +13,7 @@ exports.getSlider = async (req, res) => {
   }
 
   try {
-    const slider = await Slider.findOne({ sliderId });
+    const slider = await Slider.findOne({ sliderId, culture });
     if (!slider) {
       return res.status(404).json({
         hasError: true,
@@ -35,8 +37,10 @@ exports.getSlider = async (req, res) => {
 };
 
 exports.getAllSliders = async (req, res) => {
+  const culture = req.params.culture;
+
   try {
-    const sliders = await Slider.find();
+    const sliders = await Slider.find({ culture });
     return res.json({
       hasError: false,
       data: sliders,
