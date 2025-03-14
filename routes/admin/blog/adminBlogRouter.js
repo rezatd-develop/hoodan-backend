@@ -3,11 +3,12 @@ const adminBlogRouter = express();
 const { getAllBlogs, getBlogDetail, editBlog, createBlog, removeBlog } = require('../../../controllers/admin/blog/adminBlogController');
 const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTokenAndSetUserId');
 const verifyAdmin = require('../../../middlewares/auth/verifyAdmin');
+const { upload } = require('../../../middlewares/uploadMedia/uploadMediaMiddleware');
 
-adminBlogRouter.get('/en/admin/blogs/getAllBlogs', verifyTokenAndSetUserId, verifyAdmin, getAllBlogs);
-adminBlogRouter.get('/en/admin/blogs/getBlogDetail', verifyTokenAndSetUserId, verifyAdmin, getBlogDetail);
-adminBlogRouter.put('/en/admin/blogs/editBlog', verifyTokenAndSetUserId, verifyAdmin, editBlog);
-adminBlogRouter.post('/en/admin/blogs/createBlog', verifyTokenAndSetUserId, verifyAdmin, createBlog);
-adminBlogRouter.delete('/en/admin/blogs/removeBlog', verifyTokenAndSetUserId, verifyAdmin, removeBlog);
+adminBlogRouter.get('/getAllBlogs', verifyTokenAndSetUserId, verifyAdmin, getAllBlogs);
+adminBlogRouter.get('/getBlogDetail', verifyTokenAndSetUserId, verifyAdmin, getBlogDetail);
+adminBlogRouter.put('/editBlog', verifyTokenAndSetUserId, verifyAdmin, upload.single('image'), editBlog);
+adminBlogRouter.post('/createBlog', verifyTokenAndSetUserId, verifyAdmin, upload.single('image'), createBlog);
+adminBlogRouter.delete('/removeBlog', verifyTokenAndSetUserId, verifyAdmin, removeBlog);
 
 module.exports = adminBlogRouter;
