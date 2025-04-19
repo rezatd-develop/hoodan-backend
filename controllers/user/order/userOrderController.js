@@ -2,7 +2,7 @@ const Order = require('../../../models/Order');
 const Product = require('../../../models/Product');
 const Cart = require('../../../models/Cart'); // Import Cart model
 const moment = require('moment'); // Import moment.js for date formatting
-const { translateOrderStatus } = require('../../../utilities/enumTranslations/enumTranslator');
+const translateOrderStatus = require('../../../utilities/enumTranslations/enumTranslator');
 
 exports.createOrder = async (req, res) => {
   try {

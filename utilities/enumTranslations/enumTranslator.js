@@ -1,6 +1,6 @@
 const enumerations = require('../../resources/enumerations')
 
-export const translateOrderStatus = (orderStatus) => {
+const translateOrderStatus = (orderStatus) => {
     switch (orderStatus) {
         case enumerations.order.orderStatus.registered: return 'registered'
         case enumerations.order.orderStatus.preparing: return 'preparing'
@@ -8,4 +8,6 @@ export const translateOrderStatus = (orderStatus) => {
         default:
             break;
     }
-}
+};
+
+module.exports = translateOrderStatus;
