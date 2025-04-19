@@ -3,7 +3,7 @@ const adminBlogRouter = express();
 const { getAllBlogs, getBlogDetail, editBlog, createBlog, removeBlog } = require('../../../controllers/admin/blog/adminBlogController');
 const { verifyTokenAndSetUserId } = require('../../../middlewares/auth/verifyTokenAndSetUserId');
 const verifyAdmin = require('../../../middlewares/auth/verifyAdmin');
-const { upload } = require('../../../middlewares/uploadMedia/uploadMediaMiddleware');
+const upload  = require('../../../middlewares/uploadMedia/uploadMediaMiddleware');
 
 adminBlogRouter.get('/getAllBlogs', verifyTokenAndSetUserId, verifyAdmin, getAllBlogs);
 adminBlogRouter.get('/getBlogDetail', verifyTokenAndSetUserId, verifyAdmin, getBlogDetail);
