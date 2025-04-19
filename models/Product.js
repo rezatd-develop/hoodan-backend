@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
   primaryDescription: { type: String },
   secondDescription: { type: String },
   thirdDescription: { type: String },
-  price: { type: String },
+  price: { type: Number },
   FaqOneKey: { type: String },
   FaqOneValue: { type: String },
   FaqTwoKey: { type: String },

@@ -1,4 +1,4 @@
-import { enumerations } from "../../resources/enumerations.js";
+const enumerations = require('../../resources/enumerations')
 
 export const translateOrderStatus = (orderStatus) => {
     switch (orderStatus) {
