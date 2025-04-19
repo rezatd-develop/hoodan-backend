@@ -1,4 +1,4 @@
-export const enumerations = {
+const enumerations = {
     order: {
         orderStatus: {
             registered: 0,
@@ -6,4 +6,6 @@ export const enumerations = {
             ready: 2
         }
     }
-}
+};
+
+module.exports = enumerations;
