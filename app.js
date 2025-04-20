@@ -9,7 +9,11 @@ const { startListeningServer } = require('./utilities/listener/listener')
 
 const path = require("path");
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true
+}));
+
 const app = express();
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(startupMiddlewaresApp);
