@@ -87,7 +87,7 @@ exports.createBlog = async (req, res) => {
       description,
       publishDate: formattedPublishDate,
       author,
-      images: req.file ? `http://localhost:3001/${req.file.path}` : [],
+      images: req.file ? `http://156.253.5.235:3001/${req.file.path}` : [],
       categories: parsedCategories,
       content,
       culture
