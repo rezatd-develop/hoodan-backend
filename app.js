@@ -11,7 +11,7 @@ const path = require("path");
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:80', 'http://156.253.5.235', 'http://156.253.5.235:3000', 'http://156.253.5.235:5000', 'http://156.253.5.235:3001'],
+    origin: '*',
     credentials: true,
 }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
