@@ -14,6 +14,7 @@ app.use(cors({
     origin: 'http://156.253.5.235:3000', 
     credentials: true
 }));
+app.options('*', cors());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(startupMiddlewaresApp);
