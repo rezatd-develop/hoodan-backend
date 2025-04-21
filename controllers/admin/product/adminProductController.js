@@ -44,7 +44,7 @@ exports.editProduct = async (req, res) => {
     }
 
     try {
-        const baseUrl = `http://localhost:3001`;
+        const baseUrl = `http://localhost:5000`;
         update.imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
 
 
