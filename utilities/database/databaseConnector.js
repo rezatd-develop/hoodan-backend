@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const mongoURI = 'mongodb://rezatd:098123JUju.@localhost:27017/hoodan?authSource=hoodan';
+    const mongoURI = 'mongodb://156.253.5.235:27017/hoodan?authSource=hoodan';
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
