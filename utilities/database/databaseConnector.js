@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    const mongoURI = 'mongodb://rezatdhoodan:rezatdhoodan@156.253.5.235:27017/hoodan?authSource=hoodan';
-    await mongoose.connect(mongoURI, {
+    await mongoose.connect('mongodb://rezatdhoodan:rezatdhoodan@156.253.5.235:27017/hoodan?authSource=hoodan', {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     });
     console.log('MongoDB connected successfully');
   } catch (error) {
