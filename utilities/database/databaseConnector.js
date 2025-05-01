@@ -4,11 +4,20 @@ const connectDB = async () => {
   try {
     await mongoose.connect('mongodb://156.253.5.235:27017/hoodan', {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
-    console.log('MongoDB connected successfully');
+
+    mongoose.connection.once('open', () => {
+      console.log('MongoDB connected successfully');
+    });
+
+    mongoose.connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+      process.exit(1);
+    });
+
   } catch (error) {
-    console.error('MongoDB connection error:', error);
+    console.error('Initial MongoDB connection error:', error);
     process.exit(1);
   }
 };
