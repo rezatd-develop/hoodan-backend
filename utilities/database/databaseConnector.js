@@ -7,7 +7,7 @@ mongoose.set('strictQuery', true);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://156.253.5.235:27017/hoodan', {
+    await mongoose.connect('mongodb://rezatd:MohsenLorestan7234788@156.253.5.235:27017/admin?authSource=admin', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
