@@ -1,25 +1,33 @@
 const { sendOtp, verifyOtp } = require('../../../utilities/otp/otp');
 const { generateToken } = require('../../../utilities/jwt/jwt');
-const { findUserByPhone, createUser } = require('../../../services/userService');
+const {
+  findUserByEmail,
+  createUser
+} = require('../../../services/userService');
 
-exports.getPhone = async (req, res) => {
-  const { phone } = req.body;
-  if (!phone) {
+exports.sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
     return res.status(400).json({
       hasError: true,
       data: null,
-      message: 'Phone number is required'
+      message: 'Email is required'
     });
   }
+
   try {
-    await sendOtp(phone);
+    await sendOtp(email);
+
     return res.json({
       hasError: false,
-      data: { phone },
+      data: { email },
       message: 'OTP sent successfully'
     });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       hasError: true,
       data: null,
@@ -29,16 +37,20 @@ exports.getPhone = async (req, res) => {
 };
 
 exports.verifyOtp = async (req, res) => {
-  const { phone, code } = req.body;
-  if (!phone || !code) {
+  const { email, code } = req.body;
+
+  if (!email || !code) {
     return res.status(400).json({
       hasError: true,
       data: null,
-      message: 'Phone and OTP code are required'
+      message: 'Email and OTP code are required'
     });
   }
+
   try {
-    const isValid = await verifyOtp(phone, code);
+
+    const isValid = await verifyOtp(email, code);
+
     if (!isValid) {
       return res.status(400).json({
         hasError: true,
@@ -47,26 +59,28 @@ exports.verifyOtp = async (req, res) => {
       });
     }
 
-    const user = await findUserByPhone(phone);
-    if (user) {
+    const user = await findUserByEmail(email);
 
+    if (user) {
       const token = generateToken(user);
+
       return res.json({
         hasError: false,
         data: { token },
         message: 'Authentication successful'
       });
-    } else {
-
-      return res.json({
-        hasError: false,
-        data: null,
-        message: 'User not found, please complete registration',
-        continueToSignUp: true
-      });
     }
+
+    return res.json({
+      hasError: false,
+      data: { email },
+      continueToSignUp: true,
+      message: 'User not found, please complete registration'
+    });
+
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       hasError: true,
       data: null,
@@ -76,17 +90,26 @@ exports.verifyOtp = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-  const { phone, firstName, lastName } = req.body;
-  if (!phone || !firstName || !lastName) {
+
+  const {
+    email,
+    phone,
+    firstName,
+    lastName
+  } = req.body;
+
+  if (!email || !firstName || !lastName) {
     return res.status(400).json({
       hasError: true,
       data: null,
-      message: 'Phone, first name, and last name are required'
+      message: 'Email, first name and last name are required'
     });
   }
+
   try {
 
-    const existingUser = await findUserByPhone(phone);
+    const existingUser = await findUserByEmail(email);
+
     if (existingUser) {
       return res.status(400).json({
         hasError: true,
@@ -95,19 +118,32 @@ exports.registerUser = async (req, res) => {
       });
     }
 
-    const user = await createUser({ phone, firstName, lastName });
+    const user = await createUser({
+      email,
+      phone,
+      firstName,
+      lastName
+    });
+
     const token = generateToken(user);
+
     return res.json({
       hasError: false,
-      data: null,
+      data: {
+        token
+      },
       message: 'Registration successful'
     });
+
   } catch (error) {
+
     console.error(error);
+
     return res.status(500).json({
       hasError: true,
       data: null,
       message: 'Error registering user'
     });
+
   }
 };
