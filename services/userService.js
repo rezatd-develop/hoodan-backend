@@ -6,7 +6,7 @@ exports.findUserByEmail = async (email) => {
   });
 };
 
-exports.findUserByPhone = async (phone) => {
+exports.findUserByEmail = async (phone) => {
   return await User.findOne({ phone });
 };
 

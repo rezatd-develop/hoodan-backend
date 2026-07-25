@@ -1,10 +1,10 @@
 const express = require('express');
-const verifyAdmin = require('../../middlewares/auth/verifyAdmin');
-const { verifyTokenAndSetUserId } = require('../../middlewares/auth/verifyTokenAndSetUserId');
-const accessAccepted = require('../../controllers/auth/authController');
-const authRouter = express.Router({ mergeParams: true });
+const router = express.Router();
 
-authRouter.get('/isAdmin', verifyTokenAndSetUserId, verifyAdmin, accessAccepted);
-authRouter.get('/isUser', verifyTokenAndSetUserId, accessAccepted);
+const authController = require('../../../controllers/public/auth/publicAuthController');
 
-module.exports = authRouter;
+router.post('/send-otp', authController.sendOtp);
+router.post('/verify-otp', authController.verifyOtp);
+router.post('/register', authController.registerUser);
+
+module.exports = router;

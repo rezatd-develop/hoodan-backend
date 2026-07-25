@@ -1,22 +1,15 @@
-const otpStore = new Map();
-const axios = require('axios')
+const { Resend } = require('resend');
 const Otp = require('../../models/Otp');
-const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
 
 exports.sendOtp = async (email) => {
 
   const code = Math.floor(
     100000 + Math.random() * 900000
   ).toString();
+
 
   await Otp.findOneAndUpdate(
     { email },
@@ -30,38 +23,39 @@ exports.sendOtp = async (email) => {
     }
   );
 
-  await transporter.sendMail({
 
-    from: process.env.EMAIL_USER,
-
+  await resend.emails.send({
+    from: 'onboarding@resend.dev',
     to: email,
-
     subject: 'Verification Code',
-
     html: `
-            <h2>Your verification code</h2>
-            <h1>${code}</h1>
-            <p>This code expires in 5 minutes.</p>
-        `
+      <h1>${code}</h1>
+      <p>This code expires in 5 minutes.</p>
+    `
   });
 
 };
 
+
 exports.verifyOtp = async (email, code) => {
 
-  const record = await Otp.findOne({
+  const otp = await Otp.findOne({
     email
   });
 
-  if (!record)
+
+  if (!otp)
     return false;
 
-  if (record.code !== code)
+
+  if (otp.code !== code)
     return false;
+
 
   await Otp.deleteOne({
     email
   });
+
 
   return true;
 };
