@@ -9,8 +9,8 @@ const path = require('path');
 const mainRouter = require('./routes/mainRouter');
 const accessControlHeadersApp = require('./utilities/accessControlHeaders/accessControlHeaders');
 const startupMiddlewaresApp = require('./utilities/startupMiddlewares/startupMiddlewares');
-const databaseConnectorApp = require('./utilities/database/databaseConnector');
 const { startListeningServer } = require('./utilities/listener/listener');
+const connectDB = require('./utilities/database/databaseConnector');
 
 const app = express();
 
@@ -26,8 +26,19 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(startupMiddlewaresApp);
 app.use(accessControlHeadersApp);
 app.use(mainRouter);
-app.use(databaseConnectorApp);
 
-startListeningServer(app);
+
+const start = async () => {
+  try {
+    await connectDB();
+
+    startListeningServer(app);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+};
+
+start();
 
 module.exports = app;
